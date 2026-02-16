@@ -19,11 +19,11 @@ ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Copy requirements first (for Docker cache)
-COPY requirements.txt .
+COPY requirements_docker.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r requirements_docker.txt
 
 # Copy application code
 COPY . .
