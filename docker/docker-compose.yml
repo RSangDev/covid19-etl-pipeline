@@ -1,0 +1,47 @@
+services:
+  etl:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile   # usa o Dockerfile que está em docker/
+    container_name: covid19-etl-pipeline
+    volumes:
+      - ../data:/app/data
+      - ../logs:/app/logs
+      - ../config:/app/config
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=America/Sao_Paulo
+    command: python main.py
+    networks:
+      - covid-network
+    restart: "no"
+
+  dashboard:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: covid19-dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../data:/app/data
+      - ../config:/app/config
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=America/Sao_Paulo
+    command: streamlit run src/visualization/dashboard.py --server.port=8501 --server.address=0.0.0.0 --server.headless=true
+    depends_on:
+      - etl
+    networks:
+      - covid-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  covid-network:
+    driver: bridge

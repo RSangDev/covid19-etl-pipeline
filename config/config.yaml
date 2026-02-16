@@ -1,0 +1,97 @@
+# COVID-19 ETL Pipeline Configuration
+
+# Data Sources
+data_sources:
+  owid_covid:
+    url: "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
+    format: "csv"
+    description: "Our World in Data - COVID-19 Dataset"
+  
+  owid_vaccinations:
+    url: "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv"
+    format: "csv"
+    description: "Global Vaccination Data"
+
+# Database Configuration
+database:
+  type: "sqlite"
+  path: "data/database/covid19.db"
+  tables:
+    covid_cases: "covid_cases"
+    vaccinations: "vaccinations"
+    aggregated_stats: "aggregated_stats"
+
+# PySpark Configuration
+spark:
+  app_name: "COVID19-ETL-Pipeline"
+  master: "local[*]"  # Use all available cores
+  config:
+    spark.sql.shuffle.partitions: 10
+    spark.driver.memory: "2g"
+    spark.executor.memory: "2g"
+
+# Processing Configuration
+processing:
+  date_columns:
+    - "date"
+  
+  metrics:
+    cases:
+      - "total_cases"
+      - "new_cases"
+      - "total_deaths"
+      - "new_deaths"
+    
+    vaccinations:
+      - "total_vaccinations"
+      - "people_vaccinated"
+      - "people_fully_vaccinated"
+      - "daily_vaccinations"
+  
+  countries_of_interest:
+    - "Brazil"
+    - "United States"
+    - "United Kingdom"
+    - "Germany"
+    - "France"
+    - "Italy"
+    - "Spain"
+    - "India"
+    - "China"
+    - "Japan"
+    - "South Korea"
+    - "Australia"
+    - "Canada"
+    - "Argentina"
+    - "Chile"
+
+# Visualization Configuration
+visualization:
+  theme: "plotly_white"
+  colors:
+    cases: "#FF6B6B"
+    deaths: "#4D4D4D"
+    vaccinations: "#51CF66"
+    recovered: "#339AF0"
+  
+  default_charts:
+    - "daily_cases_trend"
+    - "vaccination_progress"
+    - "top_countries_comparison"
+    - "mortality_rate_analysis"
+
+# Airflow Configuration
+airflow:
+  schedule_interval: "0 6 * * *"  # Daily at 6 AM
+  start_date: "2024-01-01"
+  catchup: false
+  retries: 3
+  retry_delay_minutes: 5
+
+# Output Configuration
+output:
+  data_dir: "data"
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  reports_dir: "reports"
+  logs_dir: "logs"
