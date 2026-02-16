@@ -1,38 +1,7 @@
-# Core Data Processing
-pandas==2.1.4
-numpy==1.26.2
-pyspark==3.5.0
-
-# Data Source
-requests==2.31.0
-beautifulsoup4==4.12.2
-
-# Database
-sqlalchemy==1.4.51  # Compatible with Airflow 2.8.0
-
-# Visualization
-streamlit==1.54.0
-plotly==5.18.0
-matplotlib==3.8.2
-seaborn==0.13.0
-
-# Workflow Automation
-apache-airflow==2.8.0
-
-# Testing
-pytest==7.4.3
-pytest-cov==4.1.0
-pytest-mock==3.12.0
-
-# Code Quality
-black==24.10.0
-flake8==7.0.0
-pylint==3.0.3
-
-# Utils
-python-dotenv==1.0.0
-pyyaml==6.0.1
-tqdm==4.66.1
-
-# Documentation
-sphinx==7.2.6
+# Dashboard only - NO Airflow, NO PySpark
+pandas>=2.2.0
+numpy>=1.26.0
+streamlit>=1.29.0
+plotly>=5.18.0
+sqlalchemy>=2.0.23
+pyyaml>=6.0.1
